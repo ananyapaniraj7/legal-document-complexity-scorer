@@ -42,3 +42,14 @@ def explain_sentence(sentence):
         explanations.append("Very difficult readability")
     
     return explanations
+
+def get_complexity_label(score):
+
+    if score < 150:
+        return "Moderate"
+
+    elif score < 300:
+        return "Difficult"
+
+    else:
+        return "Extremely Complex"

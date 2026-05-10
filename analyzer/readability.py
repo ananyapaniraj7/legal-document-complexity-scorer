@@ -19,7 +19,7 @@ def get_difficulty_label(score):
     elif(score>=50 and score<70):
         return "Moderate"
     elif(score>30 and score<50):
-        return "difficult"
+        return "Difficult"
     else:
         return "Very difficult"
 
