@@ -13,10 +13,10 @@ def show_difficulty_level(level):
     else:
         st.success(f"Difficulty:{level}")
 
-st.title("Legal Document Complexity Scorer")
+st.title( "AI-Powered Legal Document Analyzer")
 
 st.write(
-    "Analyze legal documents for readability and complexity."
+    "Analyze legal documents for readability, complexity, and plain-English accessibility using NLP and AI."
 )
 
 text = st.text_area(
@@ -49,7 +49,10 @@ if analyze_button:
             "Please enter a legal document."
         )
     else:
-        result=analyze_document(text)
+        with st.spinner(
+        "Analyzing legal document..."
+        ):
+            result=analyze_document(text)
 
         readability = result["readability"]
 
@@ -78,27 +81,56 @@ if analyze_button:
                 f"{jargon_density}%"
             )
 
-        complexity_score=min(abs(readability["flesch_score"]),100)
+        complexity_score = 100 - max(
+            readability["flesch_score"],
+            0
+        )
+
+        complexity_score = min(
+            int(complexity_score),
+            100
+        )
         st.subheader("Complexity Level")
 
-        st.progress(int(complexity_score))
+        st.progress(complexity_score)
 
-        st.subheader("Sentence Statistics")
+        st.subheader("Document Statistics")
 
         st.write(
             f"Average Sentence Length: {avg_length} words"
         )
-        st.subheader("Most Complex Sentences")
+        st.subheader("AI Analysis of Complex Clauses")
 
         for item in result["top_complex_sentences"]:
 
             with st.expander(
                 f"{get_complexity_label(item['score'])} • Score: {item['score']}"
             ):
+                st.subheader("Original Sentence")
 
                 st.write(item["sentence"])
 
-                st.write("Why flagged:")
+                simplification=item["simplification"]
+
+                if simplification["quality_ok"]:
+                    st.subheader("AI Simplified Version")
+                    st.success(simplification["simplified"])
+                    col_a,col_b=st.columns(2)
+                    with col_a:
+                        st.metric(
+                            "Before Grade",
+                            simplification["grade_before"]
+                        )
+                    with col_b:
+                        st.metric(
+                            "After Grade",
+                            simplification["grade_after"]
+                        )
+                else:
+                    st.info("No reliable simplification generated.")
+
+
+                st.write("Complexity Factors")
 
                 for explanation in item["explanations"]:
                     st.write(f"- {explanation}")

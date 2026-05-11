@@ -3,6 +3,7 @@ from analyzer.preprocess import get_sentences,get_average_sentence_length
 from analyzer.jargon_detector import detect_legal_terms,get_jargon_density
 from analyzer.complexity import score_sentence,rank_sentences,explain_sentence
 from analyzer.pipeline import analyze_document
+from analyzer.simplifier import simplify_sentence
 
 text = """
 Notwithstanding any provisions contained herein, the receiving party shall, upon execution of this Agreement, indemnify and hold harmless the disclosing party against any and all liabilities, claims, damages, losses, or expenses arising directly or indirectly from the unauthorized disclosure of confidential information, except where such disclosure is required by applicable law or regulatory authority.
@@ -41,6 +42,13 @@ This agreement may be terminated by either party upon providing thirty days writ
 #     print(explain_sentence(sentence))
 #     print()
 
-result = analyze_document(text)
+# result = analyze_document(text)
 
-print(result)
+# print(result)
+from analyzer.simplifier import simplify_sentence
+
+sentence = """
+The agreement may be terminated by either party upon written notice.
+"""
+
+print(simplify_sentence(sentence))
